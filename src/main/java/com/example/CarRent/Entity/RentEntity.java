@@ -1,9 +1,7 @@
 package com.example.CarRent.Entity;
 
 import com.example.CarRent.Enums.RentStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -12,7 +10,11 @@ public class RentEntity {
     @Id
     @GeneratedValue
     private Long id;
+    @ManyToOne
+    @JoinColumn(name="user_id")
     private UserEntity user;
+    @ManyToOne
+    @JoinColumn(name="car_id")
     private CarEntity car;
     private LocalDate rentStart;
     private LocalDate rentEnd;
@@ -20,7 +22,7 @@ public class RentEntity {
 
     public RentEntity() {}
 
-    public RentEntity(Long id, UserEntity user, CarEntity car, LocalDate rentStart, LocalDate rentEnd, RentStatus status) {
+    public RentEntity(UserEntity user, CarEntity car, LocalDate rentStart, LocalDate rentEnd, RentStatus status) {
         this.id = id;
         this.user = user;
         this.car = car;

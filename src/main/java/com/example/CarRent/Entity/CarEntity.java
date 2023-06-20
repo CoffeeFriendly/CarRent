@@ -1,34 +1,35 @@
 package com.example.CarRent.Entity;
 
 import com.example.CarRent.Enums.CarStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class CarEntity {
     @Id
     @GeneratedValue
     private Long id;
+
     private String brand;
     private String model;
-    private int year;
+    private int carYear;
     private int mileage;
     private int dailyPrice;
     private int prepayment;
+    @Enumerated(EnumType.STRING)
     private CarStatus status;
 
     // TODO Add car photos
 
     // TODO Make brand and model from String to Map
 
+    // TODO Add car plate number
+
     public CarEntity() {}
-    public CarEntity(Long id, String brand, String model, int year, int mileage, int dailyPrice, int prepayment,
+    public CarEntity(String brand, String model, int year, int mileage, int dailyPrice, int prepayment,
                      CarStatus status) {
-        this.id = id;
         this.brand = brand;
         this.model = model;
-        this.year = year;
+        this.carYear = year;
         this.mileage = mileage;
         this.dailyPrice = dailyPrice;
         this.prepayment = prepayment;
@@ -60,11 +61,11 @@ public class CarEntity {
     }
 
     public int getYear() {
-        return year;
+        return carYear;
     }
 
     public void setYear(int year) {
-        this.year = year;
+        this.carYear = year;
     }
 
     public int getMileage() {

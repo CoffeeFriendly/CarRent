@@ -1,34 +1,24 @@
-package com.example.CarRent.Entity;
-
-import com.example.CarRent.StringToDate;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import org.springframework.http.ResponseEntity;
+package com.example.CarRent.DTO;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-@Entity
-public class UserEntity {
-    @Id
-    @GeneratedValue
+public class UserDTO {
     private Long id;
     private String firstName;
     private String lastName;
     private String midName;
-    private LocalDate birth;
-    private String password;
+    private String birth;
 
-    public UserEntity() {}
-    public UserEntity(String firstName, String lastName, String midName, String birth,
-                      String password) {
+    public UserDTO() {
+        this.birth = String.format("%d-%d-%d", birth.getDayOfMonth(), birth.getMonthValue(), birth.getYear());
+    }
+
+    public UserDTO(Long id, String firstName, String lastName, String midName, LocalDate birth) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.midName = midName;
-        this.birth = StringToDate.format(birth);
-        this.password = password;
+        this.birth = String.format("%d-%d-%d", birth.getDayOfMonth(), birth.getMonthValue(), birth.getYear());;
     }
 
     public Long getId() {
@@ -63,19 +53,11 @@ public class UserEntity {
         this.midName = midName;
     }
 
-    public LocalDate getBirth() {
+    public String getBirth() {
         return birth;
     }
 
-    public void setBirth(LocalDate birth) {
+    public void setBirth(String birth) {
         this.birth = birth;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
