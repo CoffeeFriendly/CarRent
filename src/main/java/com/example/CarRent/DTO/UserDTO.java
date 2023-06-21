@@ -7,10 +7,10 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String midName;
-    private String birth;
+    private LocalDate birth;
 
     public UserDTO() {
-        this.birth = String.format("%d-%d-%d", birth.getDayOfMonth(), birth.getMonthValue(), birth.getYear());
+        //this.birth = String.format("%d-%d-%d", birth.getDayOfMonth(), birth.getMonthValue(), birth.getYear());
     }
 
     public UserDTO(Long id, String firstName, String lastName, String midName, LocalDate birth) {
@@ -18,7 +18,7 @@ public class UserDTO {
         this.firstName = firstName;
         this.lastName = lastName;
         this.midName = midName;
-        this.birth = String.format("%d-%d-%d", birth.getDayOfMonth(), birth.getMonthValue(), birth.getYear());;
+        this.birth = birth;
     }
 
     public Long getId() {
@@ -53,11 +53,11 @@ public class UserDTO {
         this.midName = midName;
     }
 
-    public String getBirth() {
+    public LocalDate getBirth() {
         return birth;
     }
 
-    public void setBirth(String birth) {
+    public void setBirth(LocalDate birth) {
         this.birth = birth;
     }
 }
