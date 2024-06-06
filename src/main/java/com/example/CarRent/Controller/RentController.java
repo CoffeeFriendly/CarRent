@@ -3,6 +3,7 @@ package com.example.CarRent.Controller;
 import com.example.CarRent.Entity.RentEntity;
 import com.example.CarRent.Exception.RentNotFoundException;
 import com.example.CarRent.Repository.RentsRepository;
+import com.example.CarRent.Services.RentService;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
@@ -17,56 +18,46 @@ import java.util.Map;
 @RequestMapping("/rents")
 public class RentController {
     private final RentsRepository repository;
+    private final RentService service;
 
-    public RentController(RentsRepository repository) {this.repository = repository;}
+    public RentController(RentsRepository repository, RentService service) {
+        this.repository = repository;
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity getRents() {
-        List<RentEntity> rents = repository.findAll();
+        List<RentEntity> rents = service.getRents();
         return ResponseEntity.ok().body(rents);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getRent(@PathVariable Long id) {
-        RentEntity rent = repository.findById(id).orElseThrow(() -> new RentNotFoundException(id));
+        RentEntity rent = service.getRent(id);
         return ResponseEntity.ok().body(rent);
     }
 
     @PostMapping
-    public ResponseEntity createRent(@RequestBody RentEntity rent) {
-        repository.save(rent);
+    public ResponseEntity createRent(@RequestBody RentEntity newRent) {
+        RentEntity rent = service.createRent(newRent);
         return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(rent.getId()).toUri()).body(rent);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateRent(@PathVariable Long id, @RequestBody RentEntity rent) {
-        RentEntity oldRent = repository.findById(id).orElseThrow(() -> new RentNotFoundException(id));
-        oldRent.setCar(rent.getCar());
-        oldRent.setUser(rent.getUser());
-        oldRent.setRentStart(rent.getRentStart());
-        oldRent.setRentEnd(rent.getRentEnd());
-        oldRent.setStatus(rent.getStatus());
-        repository.save(oldRent);
-        return ResponseEntity.ok().body(oldRent);
+    public ResponseEntity updateRent(@PathVariable Long id, @RequestBody RentEntity newRent) {
+        RentEntity rent = service.updateRent(newRent, id);
+        return ResponseEntity.ok().body(rent);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity patchRent(@PathVariable Long id, @RequestBody Map<Object, Object> fields) {
-        RentEntity rent = repository.findById(id).orElseThrow(() -> new RentNotFoundException(id));
-        fields.forEach((key, value) -> {
-            Field field = ReflectionUtils.findField(RentEntity.class, (String) key);
-            field.setAccessible(true);
-            ReflectionUtils.setField(field, rent, value);
-            field.setAccessible(false);
-        });
-        repository.save(rent);
+        RentEntity rent = service.patchRent(id, fields);
         return ResponseEntity.ok().body(rent);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteRent(@PathVariable Long id) {
-        RentEntity rent = repository.findById(id).orElseThrow(() -> new RentNotFoundException(id));
-        repository.delete(rent);
+        service.deleteRent(id);
         return ResponseEntity.ok().body("Rent with id " + id + " has been successfully removed");
     }
 }

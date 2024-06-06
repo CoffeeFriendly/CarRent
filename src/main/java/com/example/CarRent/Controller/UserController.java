@@ -5,6 +5,7 @@ import com.example.CarRent.Entity.UserEntity;
 import com.example.CarRent.Exception.UserNotFoundException;
 import com.example.CarRent.Mapper.UserMapper;
 import com.example.CarRent.Repository.UsersRepository;
+import com.example.CarRent.Services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.annotation.Validated;
@@ -20,63 +21,45 @@ import java.util.Map;
 @RequestMapping("/users")
 public class UserController {
     private final UsersRepository repository;
-    UserController(UsersRepository repository) { this.repository = repository;}
+    private final UserService service;
+    UserController(UsersRepository repository, UserService service) {
+        this.repository = repository;
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity getUsers() {
-        List<UserEntity> entities = repository.findAll();
-        HashSet<UserDTO> users = new HashSet<UserDTO>();
-        for (UserEntity user : entities) {
-            users.add(UserMapper.INSTANCE.userToDto(user));
-        }
+        List<UserDTO> users = service.getUsers();
         return ResponseEntity.ok().body(users);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getUser(@PathVariable Long id) {
-        UserEntity entity = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        UserDTO user = UserMapper.INSTANCE.userToDto(entity);
+        UserDTO user = service.getUser(id);
         return ResponseEntity.ok().body(user);
     }
 
     @PostMapping()
     public ResponseEntity createUser(@Validated @RequestBody UserEntity newUser) {
-        repository.save(newUser);
-        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newUser.getId()).toUri()).body(newUser);
+        UserEntity user = service.createUser(newUser);
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri()).body(user);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity updateUser(@PathVariable Long id, @RequestBody UserEntity newUser) {
-        UserEntity oldUser = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        oldUser.setFirstName(newUser.getFirstName());
-        oldUser.setLastName(newUser.getLastName());
-        oldUser.setMidName(newUser.getMidName());
-        oldUser.setBirth(newUser.getBirth());
-        oldUser.setPassword(newUser.getPassword());
-        repository.save(oldUser);
-        return ResponseEntity.ok().body(oldUser);
+        UserEntity user = service.updateUser(id, newUser);
+        return ResponseEntity.ok().body(user);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity patchUser(@PathVariable Long id, @RequestBody Map<Object, Object> fields) {
-        UserEntity user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-
-        fields.forEach((key, value) -> {
-            Field field = ReflectionUtils.findField(UserEntity.class, (String) key);
-            field.setAccessible(true);
-            ReflectionUtils.setField(field, user, value);
-            field.setAccessible(false);
-        });
-
-        repository.save(user);
-
+        UserEntity user = service.patchUser(id, fields);
         return ResponseEntity.ok().body(user);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {
-        if(!repository.existsById(id)) throw new UserNotFoundException(id);
-        repository.deleteById(id);
+        service.deleteUser(id);
         return ResponseEntity.ok().body("User " + id + " successfully deleted");
     }
 }
