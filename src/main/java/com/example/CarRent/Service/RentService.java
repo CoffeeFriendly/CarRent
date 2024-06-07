@@ -1,8 +1,9 @@
-package com.example.CarRent.Services;
+package com.example.CarRent.Service;
 
 import com.example.CarRent.Entity.RentEntity;
 import com.example.CarRent.Exception.RentNotFoundException;
 import com.example.CarRent.Repository.RentsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 
 @Service
 public class RentService {
+    @Autowired
     RentsRepository repository;
 
     public List<RentEntity> getRents () {

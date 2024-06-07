@@ -2,18 +2,13 @@ package com.example.CarRent.Controller;
 
 import com.example.CarRent.DTO.UserDTO;
 import com.example.CarRent.Entity.UserEntity;
-import com.example.CarRent.Exception.UserNotFoundException;
-import com.example.CarRent.Mapper.UserMapper;
 import com.example.CarRent.Repository.UsersRepository;
-import com.example.CarRent.Services.UserService;
+import com.example.CarRent.Service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +34,10 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity createUser(@Validated @RequestBody UserEntity newUser) {
         UserEntity user = service.createUser(newUser);
-        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri()).body(user);
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/{id}").buildAndExpand(user.getId()).toUri()).body(user);
     }
 
     @PutMapping("/{id}")

@@ -1,16 +1,12 @@
 package com.example.CarRent.Controller;
 
 import com.example.CarRent.Entity.RentEntity;
-import com.example.CarRent.Exception.RentNotFoundException;
 import com.example.CarRent.Repository.RentsRepository;
-import com.example.CarRent.Services.RentService;
-import org.apache.coyote.Response;
+import com.example.CarRent.Service.RentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +36,7 @@ public class RentController {
     @PostMapping
     public ResponseEntity createRent(@RequestBody RentEntity newRent) {
         RentEntity rent = service.createRent(newRent);
-        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(rent.getId()).toUri()).body(rent);
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/{id}").buildAndExpand(rent.getId()).toUri()).body(rent);
     }
 
     @PutMapping("/{id}")

@@ -1,15 +1,12 @@
 package com.example.CarRent.Controller;
 
 import com.example.CarRent.Entity.CarEntity;
-import com.example.CarRent.Exception.CarNotFoundException;
 import com.example.CarRent.Repository.CarsRepository;
-import com.example.CarRent.Services.CarService;
+import com.example.CarRent.Service.CarService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +35,7 @@ public class CarController {
     @PostMapping
     public ResponseEntity createCar(@RequestBody CarEntity newCar) {
         CarEntity car = service.createCar(newCar);
-        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(car.getId()).toUri()).body(car);
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/{id}").buildAndExpand(car.getId()).toUri()).body(car);
     }
 
     @PutMapping("/{id}")

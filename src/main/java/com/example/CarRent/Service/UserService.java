@@ -1,10 +1,11 @@
-package com.example.CarRent.Services;
+package com.example.CarRent.Service;
 
 import com.example.CarRent.DTO.UserDTO;
 import com.example.CarRent.Entity.UserEntity;
 import com.example.CarRent.Exception.UserNotFoundException;
 import com.example.CarRent.Mapper.UserMapper;
 import com.example.CarRent.Repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Service
 public class UserService {
+    @Autowired
     UsersRepository repository;
 
     public List<UserDTO> getUsers() {

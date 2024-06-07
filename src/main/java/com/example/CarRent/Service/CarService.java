@@ -1,9 +1,9 @@
-package com.example.CarRent.Services;
+package com.example.CarRent.Service;
 
 import com.example.CarRent.Entity.CarEntity;
 import com.example.CarRent.Exception.CarNotFoundException;
 import com.example.CarRent.Repository.CarsRepository;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -13,6 +13,7 @@ import java.util.Map;
 
 @Service
 public class CarService {
+    @Autowired
     CarsRepository repository;
     public List<CarEntity> getCars() {
         return repository.findAll();
@@ -52,5 +53,11 @@ public class CarService {
 
     public void deleteCar(Long id) {
         repository.deleteById(id);
+    }
+
+    public CarEntity addMileage(Long id, int mileage) {
+        CarEntity car = repository.findById(id).orElseThrow(() -> new CarNotFoundException(id));
+        car.setMileage(car.getMileage() + mileage);
+        return repository.save(car);
     }
 }
