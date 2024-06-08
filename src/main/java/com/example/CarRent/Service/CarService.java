@@ -6,10 +6,12 @@ import com.example.CarRent.Repository.CarsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class CarService {
@@ -40,6 +42,7 @@ public class CarService {
         return repository.save(car);
     }
 
+    /*
     public CarEntity patchCar(Long id, Map<Object, Object> fields) {
         CarEntity car = repository.findById(id).orElseThrow(() -> new CarNotFoundException(id));
         fields.forEach((key, value) -> {
@@ -50,6 +53,7 @@ public class CarService {
         });
         return repository.save(car);
     }
+    */
 
     public void deleteCar(Long id) {
         repository.deleteById(id);

@@ -44,11 +44,13 @@ public class CarController {
         return ResponseEntity.ok().body(car);
     }
 
+    /*
     @PatchMapping("/{id}")
     public ResponseEntity patchCar(@PathVariable Long id, @RequestBody Map<Object, Object> fields) {
         CarEntity car = service.patchCar(id, fields);
         return ResponseEntity.ok().body(car);
     }
+    */
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteCar(@PathVariable Long id) {
