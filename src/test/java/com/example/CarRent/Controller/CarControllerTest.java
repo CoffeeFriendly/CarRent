@@ -1,6 +1,7 @@
 package com.example.CarRent.Controller;
 
 import com.example.CarRent.Entity.CarEntity;
+import com.example.CarRent.Enums.CarStatus;
 import com.example.CarRent.Service.CarService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -118,5 +119,19 @@ public class CarControllerTest {
         mockMvc.perform(delete("/cars/1"))
                 .andExpect(status().isOk());
         verify(carService, times(1)).deleteCar(1L);
+    }
+
+    @Test
+    public void testChangeStatusToService() throws Exception {
+        mockMvc.perform(put("/cars/setToService/1"))
+                .andExpect(status().isOk());
+        verify(carService, times(1)).changeStatus(1L, CarStatus.SERVICE);
+    }
+
+    @Test
+    public void testChangeStatusToReady() throws Exception {
+        mockMvc.perform(put("/cars/setToReady/1"))
+                .andExpect(status().isOk());
+        verify(carService, times(1)).changeStatus(1L, CarStatus.READY_FOR_RENT);
     }
 }

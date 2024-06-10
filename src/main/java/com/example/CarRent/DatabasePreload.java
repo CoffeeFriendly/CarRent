@@ -55,9 +55,9 @@ public class DatabasePreload {
 
         System.out.println("Preloaded users");
 
-        RentEntity rent1 = new RentEntity(user1, car1, LocalDate.now(), LocalDate.now().plusDays(1), RentStatus.ACTIVE);
-        RentEntity rent2 = new RentEntity(user2, car2, LocalDate.now().minusDays(2), LocalDate.now().minusDays(1), RentStatus.FINISHED);
-        RentEntity rent3 = new RentEntity(user3, car3, LocalDate.now().minusDays(1), LocalDate.now(), RentStatus.OVERDUE);
+        RentEntity rent1 = new RentEntity(user1, car1, LocalDate.now(), LocalDate.now().plusDays(1), RentStatus.ACTIVE, 60);
+        RentEntity rent2 = new RentEntity(user2, car2, LocalDate.now().minusDays(2), LocalDate.now().minusDays(1), RentStatus.FINISHED, 120);
+        RentEntity rent3 = new RentEntity(user3, car3, LocalDate.now().minusDays(1), LocalDate.now(), RentStatus.OVERDUE, 50);
 
         rentController.createRent(rent1);
         rentController.createRent(rent2);

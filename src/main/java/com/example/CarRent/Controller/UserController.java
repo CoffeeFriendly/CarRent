@@ -1,6 +1,7 @@
 package com.example.CarRent.Controller;
 
 import com.example.CarRent.DTO.UserDTO;
+import com.example.CarRent.Entity.RentEntity;
 import com.example.CarRent.Entity.UserEntity;
 import com.example.CarRent.Repository.UsersRepository;
 import com.example.CarRent.Service.UserService;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -24,13 +24,13 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity getUsers() {
-        List<UserDTO> users = service.getUsers();
+        List<UserDTO> users = service.getUsersDTO();
         return ResponseEntity.ok().body(users);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getUser(@PathVariable Long id) {
-        UserDTO user = service.getUser(id);
+        UserDTO user = service.getUserDTO(id);
         return ResponseEntity.ok().body(user);
     }
 
@@ -46,11 +46,13 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    /*
     @PatchMapping("/{id}")
     public ResponseEntity patchUser(@PathVariable Long id, @RequestBody Map<Object, Object> fields) {
         UserEntity user = service.patchUser(id, fields);
         return ResponseEntity.ok().body(user);
     }
+     */
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable Long id) {

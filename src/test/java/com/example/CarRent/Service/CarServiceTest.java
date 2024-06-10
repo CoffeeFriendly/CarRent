@@ -1,6 +1,7 @@
 package com.example.CarRent.Service;
 
 import com.example.CarRent.Entity.CarEntity;
+import com.example.CarRent.Entity.RentEntity;
 import com.example.CarRent.Enums.CarStatus;
 import com.example.CarRent.Exception.CarNotFoundException;
 import com.example.CarRent.Repository.CarsRepository;
@@ -29,6 +30,8 @@ public class CarServiceTest {
     MockMvc mockMvc;
     @Mock
     CarsRepository carsRepository;
+    @Mock
+    RentService rentService;
     @InjectMocks
     CarService carService;
     CarEntity car;
@@ -101,7 +104,7 @@ public class CarServiceTest {
     public void carService_whenAddMileage_thenReturnCar() {
         given(carsRepository.findById(1L)).willReturn(java.util.Optional.of(car));
         given(carsRepository.save(car)).willReturn(car);
-        CarEntity car = carService.addMileage(1L, 1000);
+        carService.addMileage(1L, 1000);
         verify(carsRepository, times(1)).findById(1L);
         verify(carsRepository, times(1)).save(car);
         assertEquals(96000, car.getMileage());
@@ -111,5 +114,21 @@ public class CarServiceTest {
     public void carService_whenAddMileage_thenThrowCarNotFoundException() {
         given(carsRepository.findById(1L)).willReturn(java.util.Optional.empty());
         assertThrows(CarNotFoundException.class, () -> carService.addMileage(1L, 1000));
+    }
+
+    @Test
+    public void carService_whenChangeStatus_thenReturnCar() {
+        given(carsRepository.findById(1L)).willReturn(java.util.Optional.of(car));
+        given(carsRepository.save(car)).willReturn(car);
+        carService.changeStatus(1L, CarStatus.READY_FOR_RENT);
+        verify(carsRepository, times(1)).findById(1L);
+        verify(carsRepository, times(1)).save(car);
+        assertEquals(CarStatus.READY_FOR_RENT, car.getStatus());
+    }
+
+    @Test
+    public void carService_whenChangeStatus_thenThrowCarNotFoundException() {
+        given(carsRepository.findById(1L)).willReturn(java.util.Optional.empty());
+        assertThrows(CarNotFoundException.class, () -> carService.changeStatus(1L, CarStatus.READY_FOR_RENT));
     }
 }

@@ -101,14 +101,15 @@ public class RentControllerTest {
 
         when(rentService.updateRent(any(RentEntity.class), anyLong())).thenReturn(rentEntity);
         mockMvc.perform(put("/rents/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(rentEntity)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(rentEntity)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json("{}"));
         verify(rentService, times(1)).updateRent(any(RentEntity.class), anyLong());
     }
 
+    /*
     @Test
     public void testPatchRent() throws Exception {
         RentEntity rentEntity = new RentEntity();
@@ -130,11 +131,46 @@ public class RentControllerTest {
                 .andExpect(content().json("{}"));
         verify(rentService, times(1)).patchRent(anyLong(), anyMap());
     }
+    */
 
     @Test
     public void testDeleteRent() throws Exception {
         mockMvc.perform(delete("/rents/1"))
                 .andExpect(status().isOk());
         verify(rentService, times(1)).deleteRent(1L);
+    }
+
+    @Test
+    public void testCancelRent() throws Exception {
+        mockMvc.perform(put("/rents/cancel/1"))
+                .andExpect(status().isOk());
+        verify(rentService, times(1)).cancelRent(1L);
+    }
+
+    @Test
+    public void testFinishRent() throws Exception {
+        mockMvc.perform(put("/rents/finish/1"))
+                .andExpect(status().isOk());
+        verify(rentService, times(1)).finishRent(1L);
+    }
+
+    @Test
+    public void testGetCarRentsHistory() throws Exception {
+        when(rentService.getCarRentsHistory(1L)).thenReturn(Collections.emptyList());
+        mockMvc.perform(get("/rents/getCarRentsHistory/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[]"));
+        verify(rentService, times(1)).getCarRentsHistory(1L);
+    }
+
+    @Test
+    public void testGetUserRentsHistory() throws Exception {
+        when(rentService.getUserRentsHistory(1L)).thenReturn(Collections.emptyList());
+        mockMvc.perform(get("/rents/getUserRentsHistory/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json("[]"));
+        verify(rentService, times(1)).getUserRentsHistory(1L);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.CarRent.Controller;
 
 import com.example.CarRent.Entity.CarEntity;
+import com.example.CarRent.Entity.RentEntity;
+import com.example.CarRent.Enums.CarStatus;
 import com.example.CarRent.Repository.CarsRepository;
 import com.example.CarRent.Service.CarService;
 import org.springframework.http.ResponseEntity;
@@ -56,5 +58,17 @@ public class CarController {
     public ResponseEntity deleteCar(@PathVariable Long id) {
         service.deleteCar(id);
         return ResponseEntity.ok().body("Car " + id + " successfully removed");
+    }
+
+    @PutMapping("/setToService/{id}")
+    public ResponseEntity setCarToService(@PathVariable Long id) {
+        service.changeStatus(id, CarStatus.SERVICE);
+        return ResponseEntity.ok().body("Car " + id + " successfully set to service");
+    }
+
+    @PutMapping("/setToReady/{id}")
+    public ResponseEntity setCarToReady(@PathVariable Long id) {
+        service.changeStatus(id, CarStatus.READY_FOR_RENT);
+        return ResponseEntity.ok().body("Car " + id + " successfully set to ready for rent");
     }
 }

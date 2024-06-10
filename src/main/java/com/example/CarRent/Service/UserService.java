@@ -7,20 +7,16 @@ import com.example.CarRent.Mapper.UserMapper;
 import com.example.CarRent.Repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserService {
     @Autowired
     UsersRepository repository;
 
-    public List<UserDTO> getUsers() {
+    public List<UserDTO> getUsersDTO() {
         List<UserEntity> entities = repository.findAll();
         List<UserDTO> users = new ArrayList<UserDTO>();
         for (UserEntity user : entities) {
@@ -29,10 +25,18 @@ public class UserService {
         return users;
     }
 
-    public UserDTO getUser(Long id) {
+    public UserDTO getUserDTO(Long id) {
         UserEntity userEntity = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         UserDTO user = UserMapper.INSTANCE.userToDto(userEntity);
         return user;
+    }
+
+    public UserEntity getUser(Long id) {
+        return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public List<UserEntity> getUsers() {
+        return repository.findAll();
     }
 
     public UserEntity createUser(UserEntity user) {
@@ -49,6 +53,7 @@ public class UserService {
         return repository.save(user);
     }
 
+    /*
     public UserEntity patchUser(Long id, Map<Object, Object> fields) {
         UserEntity user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         fields.forEach((key, value) -> {
@@ -59,6 +64,7 @@ public class UserService {
         });
         return repository.save(user);
     }
+     */
 
     public void deleteUser(Long id) {
         repository.deleteById(id);

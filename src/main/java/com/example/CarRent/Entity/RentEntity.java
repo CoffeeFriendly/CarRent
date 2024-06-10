@@ -19,16 +19,18 @@ public class RentEntity {
     private LocalDate rentStart;
     private LocalDate rentEnd;
     private RentStatus status;
+    private int mileage;
 
     public RentEntity() {}
 
-    public RentEntity(UserEntity user, CarEntity car, LocalDate rentStart, LocalDate rentEnd, RentStatus status) {
+    public RentEntity(UserEntity user, CarEntity car, LocalDate rentStart, LocalDate rentEnd, RentStatus status, int mileage) {
         this.id = id;
         this.user = user;
         this.car = car;
         this.rentStart = rentStart;
         this.rentEnd = rentEnd;
         this.status = status;
+        this.mileage = mileage;
     }
 
     public Long getId() {
@@ -73,6 +75,14 @@ public class RentEntity {
 
     public RentStatus getStatus() {
         return status;
+    }
+
+    public int getMileage() {
+        return mileage;
+    }
+
+    public void setMileage(int mileage) {
+        this.mileage = mileage;
     }
 
     public void setStatus(RentStatus status) {

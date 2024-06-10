@@ -1,12 +1,9 @@
 package com.example.CarRent.Service;
 
 import com.example.CarRent.DTO.UserDTO;
-import com.example.CarRent.Entity.CarEntity;
+import com.example.CarRent.Entity.RentEntity;
 import com.example.CarRent.Entity.UserEntity;
-import com.example.CarRent.Enums.CarStatus;
-import com.example.CarRent.Exception.CarNotFoundException;
 import com.example.CarRent.Exception.UserNotFoundException;
-import com.example.CarRent.Repository.CarsRepository;
 import com.example.CarRent.Repository.UsersRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +29,8 @@ public class UserServiceTest {
     MockMvc mockMvc;
     @Mock
     UsersRepository usersRepository;
+    @Mock
+    RentService rentService;
     @InjectMocks
     UserService userService;
     UserEntity user;
@@ -45,7 +44,7 @@ public class UserServiceTest {
     public void userService_whenGetUsers_thenReturnAllUsers() {
         UserEntity user2 = new UserEntity("Vlad", "Pavlovich", "Litvin", "19-05-1997", "1234567890");
         given(usersRepository.findAll()).willReturn(Arrays.asList(user, user2));
-        List<UserDTO> userList = userService.getUsers();
+        List<UserDTO> userList = userService.getUsersDTO();
 
         assertEquals(2, userList.size());
     }
@@ -53,21 +52,21 @@ public class UserServiceTest {
     @Test
     public void userService_whenGetUsers_thenReturnEmptyList() {
         given(usersRepository.findAll()).willReturn(Collections.emptyList());
-        List<UserDTO> userList = userService.getUsers();
+        List<UserDTO> userList = userService.getUsersDTO();
         assertEquals(0, userList.size());
     }
 
     @Test
     public void userService_whenGetUser_thenReturnUser() {
         given(usersRepository.findById(1L)).willReturn(java.util.Optional.of(user));
-        UserDTO userDTO = userService.getUser(1L);
+        UserDTO userDTO = userService.getUserDTO(1L);
         assertNotNull(userDTO);
     }
 
     @Test
     public void userService_whenGetUser_thenThrowUserNotFoundException() {
         given(usersRepository.findById(1L)).willReturn(java.util.Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> userService.getUser(1L));
+        assertThrows(UserNotFoundException.class, () -> userService.getUserDTO(1L));
     }
 
     @Test

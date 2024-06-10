@@ -1,6 +1,8 @@
 package com.example.CarRent.Service;
 
 import com.example.CarRent.Entity.CarEntity;
+import com.example.CarRent.Entity.RentEntity;
+import com.example.CarRent.Enums.CarStatus;
 import com.example.CarRent.Exception.CarNotFoundException;
 import com.example.CarRent.Repository.CarsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
@@ -59,9 +62,15 @@ public class CarService {
         repository.deleteById(id);
     }
 
-    public CarEntity addMileage(Long id, int mileage) {
+    public void addMileage(Long id, int mileage) {
         CarEntity car = repository.findById(id).orElseThrow(() -> new CarNotFoundException(id));
         car.setMileage(car.getMileage() + mileage);
-        return repository.save(car);
+        repository.save(car);
+    }
+
+    public void changeStatus(Long id, CarStatus status) {
+        CarEntity car = repository.findById(id).orElseThrow(() -> new CarNotFoundException(id));
+        car.setStatus(status);
+        repository.save(car);
     }
 }
