@@ -29,7 +29,7 @@ public class RentEntity {
         this.car = car;
         this.rentStart = rentStart;
         this.rentEnd = rentEnd;
-        this.status = status;
+        this.status = RentStatus.WAIT_FOR_CLIENT;
         this.mileage = mileage;
     }
 

@@ -1,10 +1,8 @@
 package com.example.CarRent.Controller;
 
 import com.example.CarRent.Entity.RentEntity;
-import com.example.CarRent.Exception.CarIsOccupiedException;
-import com.example.CarRent.Exception.CarNotFoundException;
-import com.example.CarRent.Exception.RentNotFoundException;
-import com.example.CarRent.Exception.UserNotFoundException;
+import com.example.CarRent.Enums.RentStatus;
+import com.example.CarRent.Exception.*;
 import com.example.CarRent.Repository.RentsRepository;
 import com.example.CarRent.Service.RentService;
 import org.springframework.http.HttpStatus;
@@ -45,6 +43,7 @@ public class RentController {
 
     @PostMapping
     public ResponseEntity createRent(@RequestBody RentEntity newRent) {
+        newRent.setStatus(RentStatus.WAIT_FOR_CLIENT);
         RentEntity rent;
         try {
             rent = service.createRent(newRent);
@@ -74,15 +73,33 @@ public class RentController {
         return ResponseEntity.ok().body("Rent with id " + id + " has been successfully removed");
     }
 
-    @PutMapping("/cancel/{id}")
+    @PutMapping("/{id}/start")
+    public ResponseEntity startRent(@PathVariable Long id) {
+        try {
+            service.startRent(id);
+        } catch (RentStatusChangeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().body("Rent with id " + id + " is now active");
+    }
+
+    @PutMapping("/{id}/cancel")
     public ResponseEntity cancelRent(@PathVariable Long id) {
-        service.cancelRent(id);
+        try {
+            service.cancelRent(id);
+        } catch (RentStatusChangeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         return ResponseEntity.ok().body("Rent with id " + id + " has been successfully canceled");
     }
 
-    @PutMapping("/finish/{id}")
+    @PutMapping("/{id}/finish")
     public ResponseEntity finishRent(@PathVariable Long id) {
-        service.finishRent(id);
+        try {
+            service.finishRent(id);
+        } catch (RentStatusChangeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         return ResponseEntity.ok().body("Rent with id " + id + " has been successfully finished");
     }
 

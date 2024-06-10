@@ -65,7 +65,7 @@ public class RentServiceTest {
 
     @Test
     public void rentService_whenGetRents_thenReturnAllRents() {
-        RentEntity rent2 = new RentEntity(user, car, LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), RentStatus.WAIT_FOR_PREPAYMENT, 120);
+        RentEntity rent2 = new RentEntity(user, car, LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), RentStatus.WAIT_FOR_CLIENT, 120);
         given(rentsRepository.findAll()).willReturn(Arrays.asList(rent, rent2));
         List<RentEntity> rentList = rentService.getRents();
 
@@ -169,5 +169,13 @@ public class RentServiceTest {
         List<RentEntity> rentList = rentService.getUserRentsHistory(1L);
 
         assertEquals(2, rentList.size());
+    }
+
+    @Test
+    public void rentService_whenStartRent_thenReturnRent() {
+        given(rentsRepository.save(rent)).willReturn(rent);
+        given(rentsRepository.findById(1L)).willReturn(java.util.Optional.of(rent));
+        RentEntity startedRent = rentService.startRent(1L);
+        assertEquals(RentStatus.ACTIVE, startedRent.getStatus());
     }
 }

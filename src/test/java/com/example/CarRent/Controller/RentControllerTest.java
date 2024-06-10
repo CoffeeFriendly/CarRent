@@ -141,15 +141,21 @@ public class RentControllerTest {
     }
 
     @Test
-    public void testCancelRent() throws Exception {
-        mockMvc.perform(put("/rents/cancel/1"))
+    public void testStartRent() throws Exception {
+        mockMvc.perform(put("/rents/1/start"))
                 .andExpect(status().isOk());
-        verify(rentService, times(1)).cancelRent(1L);
+        verify(rentService, times(1)).startRent(1L);
     }
 
     @Test
+    public void testCancelRent() throws Exception {
+        mockMvc.perform(put("/rents/1/cancel"))
+                .andExpect(status().isOk());
+        verify(rentService, times(1)).cancelRent(1L);
+    }
+    @Test
     public void testFinishRent() throws Exception {
-        mockMvc.perform(put("/rents/finish/1"))
+        mockMvc.perform(put("/rents/1/finish"))
                 .andExpect(status().isOk());
         verify(rentService, times(1)).finishRent(1L);
     }

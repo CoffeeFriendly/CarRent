@@ -33,7 +33,7 @@ public class DatabasePreload {
     @PostConstruct
     void initDatabase() {
         CarEntity car1 = new CarEntity("Lada", "Granta", 2018, 96000, 1500, 500, CarStatus.READY_FOR_RENT);
-        CarEntity car2 = new CarEntity("Toyota", "Camry", 2016, 120000, 2500, 1000, CarStatus.SERVICE);
+        CarEntity car2 = new CarEntity("Toyota", "Camry", 2016, 120000, 2500, 1000, CarStatus.READY_FOR_RENT);
         CarEntity car3 = new CarEntity("Volkswagen", "Polo", 2018, 84500, 2000, 500, CarStatus.READY_FOR_RENT);
 
         carController.createCar(car1);
@@ -55,9 +55,9 @@ public class DatabasePreload {
 
         System.out.println("Preloaded users");
 
-        RentEntity rent1 = new RentEntity(user1, car1, LocalDate.now(), LocalDate.now().plusDays(1), RentStatus.ACTIVE, 60);
-        RentEntity rent2 = new RentEntity(user2, car2, LocalDate.now().minusDays(2), LocalDate.now().minusDays(1), RentStatus.FINISHED, 120);
-        RentEntity rent3 = new RentEntity(user3, car3, LocalDate.now().minusDays(1), LocalDate.now(), RentStatus.OVERDUE, 50);
+        RentEntity rent1 = new RentEntity(user1, car1, LocalDate.now(), LocalDate.now().plusDays(1), RentStatus.WAIT_FOR_CLIENT, 60);
+        RentEntity rent2 = new RentEntity(user2, car2, LocalDate.now().minusDays(2), LocalDate.now().minusDays(1), RentStatus.WAIT_FOR_CLIENT, 120);
+        RentEntity rent3 = new RentEntity(user3, car3, LocalDate.now().minusDays(1), LocalDate.now(), RentStatus.WAIT_FOR_CLIENT, 50);
 
         rentController.createRent(rent1);
         rentController.createRent(rent2);

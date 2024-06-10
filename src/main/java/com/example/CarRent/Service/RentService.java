@@ -6,7 +6,9 @@ import com.example.CarRent.Entity.UserEntity;
 import com.example.CarRent.Enums.CarStatus;
 import com.example.CarRent.Enums.RentStatus;
 import com.example.CarRent.Exception.CarIsOccupiedException;
+import com.example.CarRent.Exception.CarStatusException;
 import com.example.CarRent.Exception.RentNotFoundException;
+import com.example.CarRent.Exception.RentStatusChangeException;
 import com.example.CarRent.Repository.RentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,9 @@ public class RentService {
         RentEntity overlapingRent = isCarFreeToRentAtPeriod(rent);
         if (overlapingRent != null) {
             throw new CarIsOccupiedException(rent, overlapingRent);
+        }
+        if (rent.getCar().getStatus() != CarStatus.READY_FOR_RENT) {
+            throw new CarStatusException(rent.getCar().getId());
         }
         return repository.save(rent);
     }
@@ -67,8 +72,20 @@ public class RentService {
         repository.deleteById(id);
     }
 
+    public RentEntity startRent(Long id) {
+        RentEntity rent = repository.findById(id).orElseThrow(() -> new RentNotFoundException(id));
+        if (rent.getStatus() != RentStatus.WAIT_FOR_CLIENT) {
+            throw new RentStatusChangeException(id, rent.getStatus(), RentStatus.ACTIVE);
+        }
+        rent.setStatus(RentStatus.ACTIVE);
+        return repository.save(rent);
+    }
+
     public RentEntity cancelRent(Long id) {
         RentEntity rent = repository.findById(id).orElseThrow(() -> new RentNotFoundException(id));
+        if (rent.getStatus() == RentStatus.ACTIVE) {
+            throw new RentStatusChangeException(id, rent.getStatus(), RentStatus.CANCELLED);
+        }
         rent.setStatus(RentStatus.CANCELLED);
         return repository.save(rent);
     }
@@ -76,6 +93,10 @@ public class RentService {
     public RentEntity finishRent(Long id) {
         RentEntity rent = repository.findById(id).orElseThrow(() -> new RentNotFoundException(id));
         CarEntity car = rent.getCar();
+
+        if (rent.getStatus() != RentStatus.ACTIVE) {
+            throw new RentStatusChangeException(id, rent.getStatus(), RentStatus.FINISHED);
+        }
 
         rent.setStatus(RentStatus.FINISHED);
         carService.addMileage(car.getId(), rent.getMileage());
