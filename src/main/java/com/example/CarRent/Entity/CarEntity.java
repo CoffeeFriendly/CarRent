@@ -2,28 +2,37 @@ package com.example.CarRent.Entity;
 
 import com.example.CarRent.Enums.CarStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "cars", schema = "public")
 public class CarEntity {
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @NotNull
+    @Column(name = "id")
     private Long id;
-    @Column(name = "brand", nullable = false)
+    @NotNull
+    @Column(name = "brand")
     private String brand;
-    @Column(name = "model", nullable = false)
+    @NotNull
+    @Column(name = "model")
     private String model;
-    @Column(name = "car_year", nullable = false)
+    @NotNull
+    @Column(name = "car_year")
     private int carYear;
-    @Column(name = "mileage", nullable = false)
+    @NotNull
+    @Column(name = "mileage")
     private int mileage;
-    @Column(name = "daily_price", nullable = false)
+    @NotNull
+    @Column(name = "daily_price")
     private int dailyPrice;
-    @Column(name = "prepayment", nullable = false)
+    @NotNull
+    @Column(name = "prepayment")
     private int prepayment;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @NotNull
+    @Column(name = "status")
     private CarStatus status;
 
     // TODO Add car photos

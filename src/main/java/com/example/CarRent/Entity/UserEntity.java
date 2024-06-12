@@ -2,6 +2,7 @@ package com.example.CarRent.Entity;
 
 import com.example.CarRent.StringToDate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -12,18 +13,24 @@ import java.time.format.DateTimeFormatter;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @NotNull
+    @Column(name = "id")
     private Long id;
+    @NotNull
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name", nullable = false)
+    @NotNull
+    @Column(name = "last_name")
     private String lastName;
-    @Column(name = "mid_name", nullable = false)
+    @NotNull
+    @Column(name = "mid_name")
     private String midName;
-    @Column(name = "birth", nullable = false)
+    @NotNull
+    @Column(name = "birth")
     private LocalDate birth;
-    @Column(name = "password", nullable = false)
+    @NotNull
+    @Column(name = "password")
     private String password;
 
     public UserEntity() {}

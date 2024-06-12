@@ -2,6 +2,7 @@ package com.example.CarRent.Entity;
 
 import com.example.CarRent.Enums.RentStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -10,22 +11,29 @@ import java.time.LocalDate;
 public class RentEntity {
     @Id
     @GeneratedValue
-    @Column(name = "id", nullable = false)
+    @NotNull
+    @Column(name = "id")
     private Long id;
     @ManyToOne
+    @NotNull
     @JoinColumn(name="user_id")
     private UserEntity user;
     @ManyToOne
+    @NotNull
     @JoinColumn(name="car_id")
     private CarEntity car;
-    @Column(name = "rent_start", nullable = false)
+    @NotNull
+    @Column(name = "rent_start")
     private LocalDate rentStart;
-    @Column(name = "rent_end", nullable = false)
+    @NotNull
+    @Column(name = "rent_end")
     private LocalDate rentEnd;
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private RentStatus status;
-    @Column(name = "mileage", nullable = false)
+    @NotNull
+    @Column(name = "mileage")
     private int mileage;
 
     public RentEntity() {}
