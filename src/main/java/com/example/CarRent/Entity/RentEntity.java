@@ -10,8 +10,7 @@ import java.time.LocalDate;
 @Table(name = "rents", schema = "public")
 public class RentEntity {
     @Id
-    @GeneratedValue
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @ManyToOne

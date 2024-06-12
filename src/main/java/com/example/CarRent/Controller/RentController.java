@@ -5,6 +5,7 @@ import com.example.CarRent.Enums.RentStatus;
 import com.example.CarRent.Exception.*;
 import com.example.CarRent.Repository.RentsRepository;
 import com.example.CarRent.Service.RentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class RentController {
     }
 
     @PostMapping
-    public ResponseEntity createRent(@RequestBody RentEntity newRent) {
+    public ResponseEntity createRent(@Valid @RequestBody RentEntity newRent) {
         newRent.setStatus(RentStatus.WAIT_FOR_CLIENT);
         RentEntity rent;
         try {

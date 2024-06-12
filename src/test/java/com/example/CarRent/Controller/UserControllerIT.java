@@ -1,9 +1,9 @@
 package com.example.CarRent.Controller;
 
 import com.example.CarRent.Entity.UserEntity;
-import com.example.CarRent.Mapper.UserMapper;
 import com.example.CarRent.Service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,17 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Collections;
-
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserControllerTest {
+public class UserControllerIT {
     @Autowired
     MockMvc mockMvc;
     @Mock
@@ -35,70 +32,53 @@ public class UserControllerTest {
     ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+    public void setup(WebApplicationContext wac) {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
     @Test
+    @Transactional
     public void testGetUsers() throws Exception {
-        when(userService.getUsersDTO()).thenReturn(Collections.emptyList());
-
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[]"));
-
-        verify(userService, times(1)).getUsersDTO();
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
+    @Transactional
     public void testGetUser() throws Exception {
-        when(userService.getUserDTO(1L)).thenReturn(UserMapper.INSTANCE.userToDto(new UserEntity()));
-
         mockMvc.perform(get("/users/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{}"));
-
-        verify(userService, times(1)).getUserDTO(1L);
+                .andExpect(jsonPath("$.id").value(1L));
     }
 
     @Test
+    @Transactional
     public void testCreateUser() throws Exception {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setFirstName("John");
-        userEntity.setLastName("Doe");
-
-        when(userService.createUser(any(UserEntity.class))).thenReturn(userEntity);
+        UserEntity userEntity = new UserEntity("Дмитрий", "Морозов", "Петрович", "08-06-1997", "1234567890");
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userEntity)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{}"));
-
-        verify(userService, times(1)).createUser(any(UserEntity.class));
+                .andExpect(content().json("{\"firstName\": \"Дмитрий\", \"midName\": \"Петрович\"," +
+                        " \"lastName\": \"Морозов\", \"birth\": \"1997-06-08\", \"password\": \"1234567890\"}"));
     }
 
     @Test
+    @Transactional
     public void testUpdateUser() throws Exception {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setFirstName("John");
-        userEntity.setLastName("Doe");
-
-        when(userService.updateUser(anyLong(), any(UserEntity.class))).thenReturn(userEntity);
+        UserEntity userEntity = new UserEntity("Дмитрий", "Морозов", "Петрович", "08-06-1997", "asdasdasd");
 
         mockMvc.perform(put("/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userEntity)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{}"));
-
-        verify(userService, times(1)).updateUser(anyLong(), any(UserEntity.class));
+                .andExpect(content().json("{\"firstName\": \"Дмитрий\", \"midName\": \"Петрович\"," +
+                        " \"lastName\": \"Морозов\", \"birth\": \"1997-06-08\", \"password\": \"asdasdasd\"}"));
     }
 
     /*
@@ -123,10 +103,9 @@ public class UserControllerTest {
      */
 
     @Test
+    @Transactional
     public void testDeleteUser() throws Exception {
         mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isOk());
-
-        verify(userService, times(1)).deleteUser(1L);
     }
 }

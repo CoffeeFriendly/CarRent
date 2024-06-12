@@ -2,20 +2,20 @@ package com.example.CarRent.Entity;
 
 import com.example.CarRent.Enums.CarStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "cars", schema = "public")
 public class CarEntity {
     @Id
-    @GeneratedValue
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @NotNull
+    @NotBlank
     @Column(name = "brand")
     private String brand;
-    @NotNull
+    @NotBlank
     @Column(name = "model")
     private String model;
     @NotNull

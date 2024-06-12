@@ -5,6 +5,7 @@ import com.example.CarRent.Entity.RentEntity;
 import com.example.CarRent.Entity.UserEntity;
 import com.example.CarRent.Repository.UsersRepository;
 import com.example.CarRent.Service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity createUser(@Validated @RequestBody UserEntity newUser) {
+    public ResponseEntity createUser(@Valid @RequestBody UserEntity newUser) {
         UserEntity user = service.createUser(newUser);
         return ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/{id}").buildAndExpand(user.getId()).toUri()).body(user);
     }

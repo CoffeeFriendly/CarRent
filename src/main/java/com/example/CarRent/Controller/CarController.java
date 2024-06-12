@@ -5,6 +5,7 @@ import com.example.CarRent.Entity.RentEntity;
 import com.example.CarRent.Enums.CarStatus;
 import com.example.CarRent.Repository.CarsRepository;
 import com.example.CarRent.Service.CarService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,13 +36,13 @@ public class CarController {
     }
 
     @PostMapping
-    public ResponseEntity createCar(@RequestBody CarEntity newCar) {
+    public ResponseEntity createCar(@Valid @RequestBody CarEntity newCar) {
         CarEntity car = service.createCar(newCar);
         return ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/{id}").buildAndExpand(car.getId()).toUri()).body(car);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateCar(@PathVariable Long id, CarEntity newCar) {
+    public ResponseEntity updateCar(@PathVariable Long id, @Valid @RequestBody CarEntity newCar) {
         CarEntity car  = service.updateCar(newCar, id);
         return ResponseEntity.ok().body(car);
     }
