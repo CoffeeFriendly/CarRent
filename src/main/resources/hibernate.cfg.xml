@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+
+
+<hibernate-configuration>
+    <session-factory>
+        <!--    MySQL account name  -->
+        <property name="connection.username">postgres</property>
+
+        <!--    MySQL password  -->
+        <property name="connection.password">asd125</property>
+
+        <!--    MySQL driver  -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+
+        <!--    MySQL connectionURL  -->
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+
+        <!--    Database dialect  -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!--    Display SQL statement  -->
+        <property name="show_sql">true</property>
+
+        <!--    Format SQL statement  -->
+        <property name="format_sql">true</property>
+
+<!--        <mapping class="com\example\CarRent\Entity\UserEntity"/>-->
+<!--        <mapping class="com\example\CarRent\Entity\CarEntity"/>-->
+<!--        <mapping class="com\example\CarRent\Entity\RentEntity"/>-->
+    </session-factory>
+</hibernate-configuration>

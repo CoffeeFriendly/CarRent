@@ -1,23 +1,29 @@
 package com.example.CarRent.Entity;
 
 import com.example.CarRent.StringToDate;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
+@Table(name = "users", schema = "public")
 public class UserEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "mid_name", nullable = false)
     private String midName;
+    @Column(name = "birth", nullable = false)
     private LocalDate birth;
+    @Column(name = "password", nullable = false)
     private String password;
 
     public UserEntity() {}

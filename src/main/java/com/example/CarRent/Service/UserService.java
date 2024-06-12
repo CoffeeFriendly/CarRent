@@ -1,5 +1,6 @@
 package com.example.CarRent.Service;
 
+import com.example.CarRent.DAO.UserDAOimpl;
 import com.example.CarRent.DTO.UserDTO;
 import com.example.CarRent.Entity.UserEntity;
 import com.example.CarRent.Exception.UserNotFoundException;
@@ -15,9 +16,11 @@ import java.util.List;
 public class UserService {
     @Autowired
     UsersRepository repository;
+    @Autowired
+    UserDAOimpl userDAO;
 
     public List<UserDTO> getUsersDTO() {
-        List<UserEntity> entities = repository.findAll();
+        List<UserEntity> entities = getUsers();
         List<UserDTO> users = new ArrayList<UserDTO>();
         for (UserEntity user : entities) {
             users.add(UserMapper.INSTANCE.userToDto(user));

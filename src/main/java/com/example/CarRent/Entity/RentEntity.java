@@ -23,7 +23,7 @@ public class RentEntity {
 
     public RentEntity() {}
 
-    public RentEntity(UserEntity user, CarEntity car, LocalDate rentStart, LocalDate rentEnd, RentStatus status, int mileage) {
+    public RentEntity(UserEntity user, CarEntity car, LocalDate rentStart, LocalDate rentEnd, int mileage) {
         this.id = id;
         this.user = user;
         this.car = car;
