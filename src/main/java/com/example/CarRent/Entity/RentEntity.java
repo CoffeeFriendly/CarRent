@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "rents", schema = "public")
 public class RentEntity {
     @Id
     @GeneratedValue
+    @Column(name = "id", nullable = false)
     private Long id;
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -16,9 +18,14 @@ public class RentEntity {
     @ManyToOne
     @JoinColumn(name="car_id")
     private CarEntity car;
+    @Column(name = "rent_start", nullable = false)
     private LocalDate rentStart;
+    @Column(name = "rent_end", nullable = false)
     private LocalDate rentEnd;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private RentStatus status;
+    @Column(name = "mileage", nullable = false)
     private int mileage;
 
     public RentEntity() {}

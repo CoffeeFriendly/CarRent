@@ -4,23 +4,29 @@ import com.example.CarRent.Enums.CarStatus;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "cars", schema = "public")
 public class CarEntity {
     @Id
     @GeneratedValue
+    @Column(name = "id", nullable = false)
     private Long id;
-
+    @Column(name = "brand", nullable = false)
     private String brand;
+    @Column(name = "model", nullable = false)
     private String model;
+    @Column(name = "car_year", nullable = false)
     private int carYear;
+    @Column(name = "mileage", nullable = false)
     private int mileage;
+    @Column(name = "daily_price", nullable = false)
     private int dailyPrice;
+    @Column(name = "prepayment", nullable = false)
     private int prepayment;
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private CarStatus status;
 
     // TODO Add car photos
-
-    // TODO Make brand and model from String to Map
 
     // TODO Add car plate number
 
