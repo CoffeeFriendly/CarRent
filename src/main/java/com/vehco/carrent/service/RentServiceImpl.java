@@ -21,16 +21,16 @@ import java.util.List;
 public class RentServiceImpl implements  RentService{
     private final CarService carService;
     private final UserService userService;
-    RentRepository rentRepository;
+    private final RentRepository rentRepository;
 
     @Override
     @Transactional
-    public Rent createRent(Long carId, Long userId, LocalDateTime rentStart, LocalDateTime rentEnd) {
+    public Rent create(Long carId, Long userId, LocalDateTime rentStart, LocalDateTime rentEnd) {
         Car car = carService.findById(carId);
         User user = userService.findById(userId);
 
         // Correct date - end after start, no less than 1 day.
-        if (Duration.between(rentStart, rentEnd).toDays() <= 1) throw new RuntimeException("Rent length must be at least 1 day");
+        if (Duration.between(rentStart, rentEnd).toHours() < 24) throw new RuntimeException("Rent length must be at least 1 day");
 
         Rent rent = new Rent(rentStart, rentEnd, RentStatus.PENDING, user, car);
         rentRepository.save(rent);

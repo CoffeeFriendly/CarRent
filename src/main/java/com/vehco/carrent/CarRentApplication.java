@@ -7,9 +7,8 @@ import com.vehco.carrent.enums.Role;
 import com.vehco.carrent.model.Car;
 import com.vehco.carrent.model.Rent;
 import com.vehco.carrent.model.User;
-import com.vehco.carrent.repository.CarRepository;
-import com.vehco.carrent.repository.RentRepository;
-import com.vehco.carrent.repository.UserRepository;
+import com.vehco.carrent.service.CarService;
+import com.vehco.carrent.service.RentService;
 import com.vehco.carrent.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,8 +29,8 @@ public class CarRentApplication {
 
     @Bean
     public CommandLineRunner CreateTestData(UserService userService,
-                                            CarRepository carRepository,
-                                            RentRepository rentRepository) {
+                                            CarService carService,
+                                            RentService rentService) {
         return args -> {
             User user;
             Car car;
@@ -51,8 +50,8 @@ public class CarRentApplication {
                 rent = new Rent(start, end, RentStatus.ACTIVE, user, car);
 
                 userService.register(user, "pass123");
-                //carRepository.save(car);
-                //rentRepository.save(rent);
+                carService.create(car);
+                rentService.create(car.getId(), user.getId(), start, end);
 
                 System.out.println("\uD83D\uDFE2 ТЕСТОВЫЕ ДАННЫЕ УСПЕШНО СОЗДАНЫ!");
             } catch (Exception e) {

@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CarServiceImpl implements CarService {
-    CarRepository carRepository;
+    private final CarRepository carRepository;
     @Override
     public List<Car> findAll() {
         return carRepository.findAll();
@@ -28,7 +28,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    public Car save(Car car) {
+    public Car create(Car car) {
         carRepository.save(car);
         return car;
     }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RentService {
-    Rent createRent(Long carId, Long userId, LocalDateTime rentStart, LocalDateTime rentEnd);
+    Rent create(Long carId, Long userId, LocalDateTime rentStart, LocalDateTime rentEnd);
     Rent findById(Long id);
     List<Rent> findAll();
     Rent updateRent(Long id, Rent updatedRent);
