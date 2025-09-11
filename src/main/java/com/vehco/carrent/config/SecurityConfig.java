@@ -15,14 +15,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        // Разрешаем БЕЗ авторизации:
-                        .requestMatchers("/", "/home", "/login", "/register").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-
-                        // Всё остальное - ТРЕБУЕТ авторизации:
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -35,8 +30,7 @@ public class SecurityConfig {
                 )
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable) // ← Вот правильная замена!
-                )
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+                );
 
         return http.build();
     }

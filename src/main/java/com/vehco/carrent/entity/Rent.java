@@ -1,4 +1,4 @@
-package com.vehco.carrent.model;
+package com.vehco.carrent.entity;
 
 import com.vehco.carrent.enums.RentStatus;
 import jakarta.persistence.*;
@@ -24,14 +24,14 @@ public class Rent {
     @DateTimeFormat
     @Getter
     @Setter
-    private LocalDateTime rentalStart;
+    private LocalDateTime rentStart;
 
     @NotNull
     @Column(name = "rental_end", nullable = false)
     @DateTimeFormat
     @Getter
     @Setter
-    private LocalDateTime rentalEnd;
+    private LocalDateTime rentEnd;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -54,9 +54,9 @@ public class Rent {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
-    public Rent(LocalDateTime rentalStart, LocalDateTime rentalEnd, RentStatus status, User user, Car car) {
-        this.rentalStart = rentalStart;
-        this.rentalEnd = rentalEnd;
+    public Rent(LocalDateTime rentStart, LocalDateTime rentEnd, RentStatus status, User user, Car car) {
+        this.rentStart = rentStart;
+        this.rentEnd = rentEnd;
         this.status = status;
         this.user = user;
         this.car = car;
@@ -66,8 +66,8 @@ public class Rent {
     public String toString() {
         return "Rent{" +
                 "id=" + id +
-                ", rentalStart=" + rentalStart +
-                ", rentalEnd=" + rentalEnd +
+                ", rentalStart=" + rentStart +
+                ", rentalEnd=" + rentEnd +
                 ", status=" + status +
                 ", user=" + user +
                 ", car=" + car +

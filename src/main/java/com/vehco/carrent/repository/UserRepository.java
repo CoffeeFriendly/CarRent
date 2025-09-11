@@ -1,6 +1,6 @@
 package com.vehco.carrent.repository;
 
-import com.vehco.carrent.model.User;
+import com.vehco.carrent.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

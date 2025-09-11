@@ -1,6 +1,6 @@
 package com.vehco.carrent.service;
 
-import com.vehco.carrent.model.Rent;
+import com.vehco.carrent.entity.Rent;
 
 import java.time.LocalDateTime;
 import java.util.List;

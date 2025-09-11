@@ -1,9 +1,9 @@
 package com.vehco.carrent.service;
 
 import com.vehco.carrent.enums.RentStatus;
-import com.vehco.carrent.model.Car;
-import com.vehco.carrent.model.Rent;
-import com.vehco.carrent.model.User;
+import com.vehco.carrent.entity.Car;
+import com.vehco.carrent.entity.Rent;
+import com.vehco.carrent.entity.User;
 import com.vehco.carrent.repository.RentRepository;
 import com.vehco.carrent.utils.EntityUtil;
 import jakarta.persistence.EntityNotFoundException;

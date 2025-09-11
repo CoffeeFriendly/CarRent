@@ -4,9 +4,9 @@ import com.vehco.carrent.enums.CarStatus;
 import com.vehco.carrent.enums.Color;
 import com.vehco.carrent.enums.RentStatus;
 import com.vehco.carrent.enums.Role;
-import com.vehco.carrent.model.Car;
-import com.vehco.carrent.model.Rent;
-import com.vehco.carrent.model.User;
+import com.vehco.carrent.entity.Car;
+import com.vehco.carrent.entity.Rent;
+import com.vehco.carrent.entity.User;
 import com.vehco.carrent.service.CarService;
 import com.vehco.carrent.service.RentService;
 import com.vehco.carrent.service.UserService;
@@ -39,7 +39,7 @@ public class CarRentApplication {
             try {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 String hashedPassword = encoder.encode("pass123");
-                user = new User("Pavlik", null, "pavlikdominator@mail.ru", "Павел",
+                user = new User("Pavlik", "pass123", "pavlikdominator@mail.ru", "Павел",
                         "Морозов", "Григорьевич", "+78005553535", Role.CUSTOMER);
 
                 car = new Car("Lada", "Vesta", 2022, Color.BROWN, "С549МН716RUS", "XTA210990Y1234567",
@@ -49,7 +49,7 @@ public class CarRentApplication {
                 LocalDateTime end = LocalDateTime.of(2025, 9, 9, 14, 0);   // 09.09.2025 14:00
                 rent = new Rent(start, end, RentStatus.ACTIVE, user, car);
 
-                userService.register(user, "pass123");
+                userService.register(user);
                 carService.create(car);
                 rentService.create(car.getId(), user.getId(), start, end);
 

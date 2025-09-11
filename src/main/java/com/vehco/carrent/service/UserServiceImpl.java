@@ -1,16 +1,16 @@
 package com.vehco.carrent.service;
 
-import com.vehco.carrent.model.User;
+import com.vehco.carrent.entity.User;
 import com.vehco.carrent.repository.UserRepository;
 import com.vehco.carrent.utils.EntityUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,13 +21,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public User register(User user, String password) {
+    public User register(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Пользователь с таким email уже существует.");
         }
 
-        String encodedPassword = passwordEncoder.encode(password);
-        user.setPasswordHash(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
 
         userRepository.save(user);
         return user;
@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService{
     public User updateUser(Long id, User updatedUser) {
         User user = findById(id);
         EntityUtil.updateEntity(user, updatedUser);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return user;
     }
 
@@ -64,7 +65,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public User delete(Long id) {
+        User user = findById(id);
         userRepository.deleteById(id);
+        return user;
     }
 }

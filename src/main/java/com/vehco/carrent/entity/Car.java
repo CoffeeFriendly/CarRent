@@ -1,4 +1,4 @@
-package com.vehco.carrent.model;
+package com.vehco.carrent.entity;
 
 import com.vehco.carrent.enums.Color;
 import com.vehco.carrent.enums.CarStatus;

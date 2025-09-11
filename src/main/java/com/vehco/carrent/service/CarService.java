@@ -1,7 +1,7 @@
 package com.vehco.carrent.service;
 
 import com.vehco.carrent.enums.CarStatus;
-import com.vehco.carrent.model.Car;
+import com.vehco.carrent.entity.Car;
 
 import java.util.List;
 

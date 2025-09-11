@@ -1,4 +1,4 @@
-package com.vehco.carrent.model;
+package com.vehco.carrent.entity;
 
 import com.vehco.carrent.enums.Role;
 import jakarta.persistence.*;
@@ -27,7 +27,7 @@ public class User {
     @Column(name = "password", nullable = false, length = 255)
     @Getter
     @Setter
-    private String passwordHash;
+    private String password;
 
     @NotBlank
     @Size(min = 10, max = 255)
@@ -78,10 +78,10 @@ public class User {
     @Setter
     private boolean isActive;
 
-    public User(String username, String passwordHash, String email, String firstName,
+    public User(String username, String password, String email, String firstName,
                 String lastName, String patronymic, String phone, Role role) {
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,7 +96,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
+                ", passwordHash='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
