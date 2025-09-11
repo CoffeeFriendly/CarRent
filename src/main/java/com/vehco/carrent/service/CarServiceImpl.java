@@ -51,7 +51,9 @@ public class CarServiceImpl implements CarService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public Car delete(Long id) {
+        Car deletedCar = findById(id);
         carRepository.deleteById(id);
+        return deletedCar;
     }
 }

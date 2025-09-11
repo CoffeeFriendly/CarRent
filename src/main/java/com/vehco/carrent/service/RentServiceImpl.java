@@ -58,44 +58,35 @@ public class RentServiceImpl implements  RentService{
 
     @Override
     @Transactional
-    public Rent confirmRent(Long id) {
+    public Rent updateStatus(Long id, RentStatus newStatus) {
         Rent rent = findById(id);
-        if (rent.getStatus() != RentStatus.PENDING) throw new RuntimeException("Only PENDING rents can be confirmed");
-        rent.setStatus(RentStatus.AWAITS);
+        RentStatus currentStatus = rent.getStatus();
+
+        switch (newStatus) {
+            case RentStatus.AWAITS:
+                if (currentStatus != RentStatus.PENDING) throw new RuntimeException("Only PENDING rents can be confirmed");
+                break;
+            case RentStatus.CANCELLED:
+                if (currentStatus == RentStatus.COMPLETED) throw new RuntimeException("Completed rent can't be cancelled");
+                if (currentStatus == RentStatus.CANCELLED) throw new RuntimeException("Rent already cancelled");
+                break;
+            case RentStatus.COMPLETED:
+                if (currentStatus != RentStatus.ACTIVE) throw new RuntimeException("Only active rents can be finished");
+                break;
+            case RentStatus.ACTIVE:
+                if (currentStatus != RentStatus.AWAITS) throw new RuntimeException("Only AWAITS rents can be started");
+                break;
+        }
+
+        rent.setStatus(newStatus);
         return rent;
     }
 
     @Override
     @Transactional
-    public Rent cancelRent(Long id) {
+    public Rent delete(Long id) {
         Rent rent = findById(id);
-        if (rent.getStatus() == RentStatus.COMPLETED) throw new RuntimeException("Completed rent can't be cancelled");
-        if (rent.getStatus() == RentStatus.CANCELLED) throw new RuntimeException("Rent already cancelled");
-        rent.setStatus(RentStatus.CANCELLED);
-        return rent;
-    }
-
-    @Override
-    @Transactional
-    public Rent finishRent(Long id) {
-        Rent rent = findById(id);
-        if (rent.getStatus() != RentStatus.ACTIVE) throw new RuntimeException("Only active rents can be finished");
-        rent.setStatus(RentStatus.COMPLETED);
-        return rent;
-    }
-
-    @Override
-    @Transactional
-    public Rent startRent(Long id) {
-        Rent rent = findById(id);
-        if (rent.getStatus() != RentStatus.AWAITS) throw new RuntimeException("Only AWAITS rents can be started");
-        rent.setStatus(RentStatus.ACTIVE);
-        return rent;
-    }
-
-    @Override
-    @Transactional
-    public void delete(Long id) {
         rentRepository.deleteById(id);
+        return rent;
     }
 }
