@@ -10,6 +10,6 @@ public class RentDto {
     LocalDateTime rentStart;
     LocalDateTime rentEnd;
     RentStatus status;
-    UserDto user;
-    CarDto car;
+    Long user;
+    Long car;
 }

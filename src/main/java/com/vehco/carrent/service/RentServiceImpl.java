@@ -1,9 +1,11 @@
 package com.vehco.carrent.service;
 
+import com.vehco.carrent.dto.RentDto;
 import com.vehco.carrent.enums.RentStatus;
 import com.vehco.carrent.entity.Car;
 import com.vehco.carrent.entity.Rent;
 import com.vehco.carrent.entity.User;
+import com.vehco.carrent.mapping.RentMapping;
 import com.vehco.carrent.repository.RentRepository;
 import com.vehco.carrent.utils.EntityUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,10 +25,11 @@ public class RentServiceImpl implements  RentService{
     private final CarService carService;
     private final UserService userService;
     private final RentRepository rentRepository;
+    private final RentMapping rentMapping;
 
     @Override
     @Transactional
-    public Rent create(Long carId, Long userId, LocalDateTime rentStart, LocalDateTime rentEnd) {
+    public RentDto create(Long carId, Long userId, LocalDateTime rentStart, LocalDateTime rentEnd) {
         Car car = carService.findById(carId);
         User user = userService.findById(userId);
 
@@ -34,32 +38,45 @@ public class RentServiceImpl implements  RentService{
 
         Rent rent = new Rent(rentStart, rentEnd, RentStatus.PENDING, user, car);
         rentRepository.save(rent);
-        return rent;
+        return rentMapping.toDto(rent);
     }
 
     @Override
-    public Rent findById(Long id) {
-        return rentRepository.findById(id)
+    public RentDto findById(Long id) {
+        Rent rentEntity = rentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Rent not found with id " + id));
+        RentDto rentDto = rentMapping.toDto(rentEntity);
+        return rentDto;
     }
 
-    @Override
-    public List<Rent> findAll() {
-        return rentRepository.findAll();
-    }
-
-    @Override
-    @Transactional
-    public Rent updateRent(Long id, Rent updatedRent) {
-        Rent rent = findById(id);
-        EntityUtil.updateEntity(rent, updatedRent);
+    public Rent findEntityById(Long id) {
+        Rent rent = rentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Rent no found with id " + id));
         return rent;
     }
 
     @Override
+    public List<RentDto> findAll() {
+        List<RentDto> rentDtos = new ArrayList<>();
+        List<Rent> rentEntities = rentRepository.findAll();
+        for (Rent rent : rentEntities) {
+            rentDtos.add(rentMapping.toDto(rent));
+        }
+        return rentDtos;
+    }
+
+    @Override
     @Transactional
-    public Rent updateStatus(Long id, RentStatus newStatus) {
-        Rent rent = findById(id);
+    public RentDto updateRent(Long id, Rent updatedRent) {
+        Rent rent = findEntityById(id);
+        EntityUtil.updateEntity(rent, updatedRent);
+        return rentMapping.toDto(rent);
+    }
+
+    @Override
+    @Transactional
+    public RentDto updateStatus(Long id, RentStatus newStatus) {
+        Rent rent = findEntityById(id);
         RentStatus currentStatus = rent.getStatus();
 
         switch (newStatus) {
@@ -79,14 +96,14 @@ public class RentServiceImpl implements  RentService{
         }
 
         rent.setStatus(newStatus);
-        return rent;
+        return rentMapping.toDto(rent);
     }
 
     @Override
     @Transactional
-    public Rent delete(Long id) {
-        Rent rent = findById(id);
+    public RentDto delete(Long id) {
+        Rent rent = findEntityById(id);
         rentRepository.deleteById(id);
-        return rent;
+        return rentMapping.toDto(rent);
     }
 }
