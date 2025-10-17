@@ -18,8 +18,6 @@ import java.util.List;
 public class RentController {
     final private RentService rentService;
 
-    // TODO: Матрёшка. Сделать DTO.
-
     @GetMapping
     List<RentDto> getAllRents() {
         return rentService.findAll();
