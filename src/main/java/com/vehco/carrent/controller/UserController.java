@@ -5,6 +5,7 @@ import com.vehco.carrent.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @GetMapping
     List<User> getAllUsers() {
         return userService.findAll();
     }
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or #id == authentication.principal.id")
     @GetMapping("/{id}")
     User getUserById(@PathVariable Long id) {
         return userService.findById(id);
@@ -28,21 +31,25 @@ public class UserController {
         User savedUser = userService.register(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable Long id) {
         User updatedUser = userService.updateUser(id, user);
         return ResponseEntity.ok(updatedUser);
     }
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PutMapping("/{id}/block")
     ResponseEntity<User> blockUser(@PathVariable Long id) {
         User blockedUser = userService.updateAccountStatus(id, false);
         return ResponseEntity.ok(blockedUser);
     }
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PutMapping("/{id}/unblock")
     ResponseEntity<User> unblockUser(@PathVariable Long id) {
         User unblockedUser = userService.updateAccountStatus(id, true);
         return ResponseEntity.ok(unblockedUser);
     }
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<User> deleteAccount(@PathVariable Long id) {
         User deletedUser = userService.delete(id);

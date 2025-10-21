@@ -32,26 +32,35 @@ public class CarRentApplication {
                                             CarService carService,
                                             RentService rentService) {
         return args -> {
-            User user;
+            User userClient;
+            User userManager;
+            User userAdmin;
             Car car;
             Rent rent;
 
             try {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 String hashedPassword = encoder.encode("pass123");
-                user = new User("Pavlik", "pass123", "pavlikdominator@mail.ru", "Павел",
+                userClient = new User("Pavlik", "pass123", "pavlikdominator@mail.ru", "Павел",
                         "Морозов", "Григорьевич", "+78005553535", Role.CUSTOMER);
+                userManager = new User("IvanManager", "securePass456", "ivan.manager@company.com", "Иван",
+                        "Сидоров", "Петрович", "+79001234567", Role.MANAGER);
+
+                userAdmin = new User("AdminAlex", "superPass789", "admin@company.com", "Алексей",
+                        "Кузнецов", "Сергеевич", "+79109876543", Role.ADMIN);
 
                 car = new Car("Lada", "Vesta", 2022, Color.BROWN, "С549МН716RUS", "XTA210990Y1234567",
                         CarStatus.READY, BigDecimal.valueOf(1500), "https://example.com/images/ladaVestaBrown.png");
 
                 LocalDateTime start = LocalDateTime.of(2025, 9, 7, 10, 0); // 07.09.2025 10:00
                 LocalDateTime end = LocalDateTime.of(2025, 9, 9, 14, 0);   // 09.09.2025 14:00
-                rent = new Rent(start, end, RentStatus.ACTIVE, user, car);
+                rent = new Rent(start, end, RentStatus.ACTIVE, userClient, car);
 
-                userService.register(user);
+                userService.register(userClient);
+                userService.register(userManager);
+                userService.register(userAdmin);
                 carService.create(car);
-                rentService.create(car.getId(), user.getId(), start, end);
+                rentService.create(car.getId(), userClient.getId(), start, end);
 
                 System.out.println("\uD83D\uDFE2 ТЕСТОВЫЕ ДАННЫЕ УСПЕШНО СОЗДАНЫ!");
             } catch (Exception e) {

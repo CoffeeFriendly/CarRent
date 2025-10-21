@@ -7,9 +7,11 @@ import com.vehco.carrent.entity.Rent;
 import com.vehco.carrent.entity.User;
 import com.vehco.carrent.mapping.RentMapping;
 import com.vehco.carrent.repository.RentRepository;
+import com.vehco.carrent.security.UserDetailsImpl;
 import com.vehco.carrent.utils.EntityUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,5 +107,30 @@ public class RentServiceImpl implements  RentService{
         Rent rent = findEntityById(id);
         rentRepository.deleteById(id);
         return rentMapping.toDto(rent);
+    }
+
+    @Override
+    public boolean canAccess(Authentication authentication, Long rentId) {
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetailsImpl userDetails)) {
+            return false;
+        }
+        return userDetails.getId().equals(findEntityById(rentId).getUser().getId());
+    }
+
+    @Override
+    public boolean clientCanCancel(Authentication authentication, Long rentId, RentStatus newStatus) {
+        Object principal = authentication.getPrincipal();
+        Rent rent = findEntityById(rentId);
+        if (!(principal instanceof UserDetailsImpl userDetails)) {
+            return false;
+        }
+        if (rent.getStatus() != RentStatus.PENDING && rent.getStatus() != RentStatus.AWAITS) {
+            return false;
+        }
+        if (newStatus != RentStatus.CANCELLED) {
+            return false;
+        }
+        return userDetails.getId().equals(rent.getUser().getId());
     }
 }
