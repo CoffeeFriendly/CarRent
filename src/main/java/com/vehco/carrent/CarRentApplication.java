@@ -27,6 +27,7 @@ public class CarRentApplication {
         System.out.println("Hello there!");
     }
 
+    /*
     @Bean
     public CommandLineRunner CreateTestData(UserService userService,
                                             CarService carService,
@@ -68,4 +69,5 @@ public class CarRentApplication {
             }
         };
     }
+    */
 }
