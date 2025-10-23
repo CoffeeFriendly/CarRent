@@ -79,7 +79,7 @@ public class User {
     private boolean isActive;
 
     public User(String username, String password, String email, String firstName,
-                String lastName, String patronymic, String phone, Role role) {
+                String lastName, String patronymic, String phone) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -87,8 +87,8 @@ public class User {
         this.lastName = lastName;
         this.patronymic = patronymic;
         this.phone = phone;
-        this.role = role;
         this.isActive = true;
+        this.role = Role.CUSTOMER;
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.vehco.carrent.controller;
 
+import com.vehco.carrent.dto.RegisterDto;
+import com.vehco.carrent.dto.UserDto;
 import com.vehco.carrent.entity.User;
+import com.vehco.carrent.mapping.UserMappingImpl;
 import com.vehco.carrent.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserMappingImpl userMapping;
 
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @GetMapping
@@ -27,9 +31,19 @@ public class UserController {
         return userService.findById(id);
     }
     @PostMapping("/register")
-    ResponseEntity<User> registerUser(@RequestBody User user) {
+    ResponseEntity<UserDto> registerUser(@RequestBody RegisterDto registerDto) {
+        User user = new User(
+                registerDto.getUsername(),
+                registerDto.getPassword(),
+                registerDto.getEmail(),
+                registerDto.getFirstName(),
+                registerDto.getLastName(),
+                registerDto.getPatronymic(),
+                registerDto.getPhone()
+        );
         User savedUser = userService.register(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        UserDto response = userMapping.toDto(savedUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @PutMapping("/{id}")
