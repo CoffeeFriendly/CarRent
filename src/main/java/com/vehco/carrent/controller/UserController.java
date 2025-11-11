@@ -1,6 +1,6 @@
 package com.vehco.carrent.controller;
 
-import com.vehco.carrent.dto.RegisterDto;
+import com.vehco.carrent.dto.CreateUserRequest;
 import com.vehco.carrent.dto.UserDto;
 import com.vehco.carrent.entity.User;
 import com.vehco.carrent.mapping.UserMappingImpl;
@@ -31,15 +31,15 @@ public class UserController {
         return userService.findById(id);
     }
     @PostMapping("/register")
-    ResponseEntity<UserDto> registerUser(@RequestBody RegisterDto registerDto) {
+    ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest createUserRequest) {
         User user = new User(
-                registerDto.getUsername(),
-                registerDto.getPassword(),
-                registerDto.getEmail(),
-                registerDto.getFirstName(),
-                registerDto.getLastName(),
-                registerDto.getPatronymic(),
-                registerDto.getPhone()
+                createUserRequest.getUsername(),
+                createUserRequest.getPassword(),
+                createUserRequest.getEmail(),
+                createUserRequest.getFirstName(),
+                createUserRequest.getLastName(),
+                createUserRequest.getPatronymic(),
+                createUserRequest.getPhone()
         );
         User savedUser = userService.register(user);
         UserDto response = userMapping.toDto(savedUser);

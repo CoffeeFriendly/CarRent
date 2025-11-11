@@ -1,5 +1,6 @@
 package com.vehco.carrent.entity;
 
+import com.vehco.carrent.dto.CreateCarRequest;
 import com.vehco.carrent.enums.Color;
 import com.vehco.carrent.enums.CarStatus;
 import jakarta.persistence.*;
@@ -78,7 +79,6 @@ public class Car {
     @Setter
     private BigDecimal dailyPrice;
 
-    @URL
     @Column(name = "image")
     @Getter
     @Setter
@@ -95,6 +95,20 @@ public class Car {
         this.status = status;
         this.dailyPrice = dailyPrice;
         this.imageUrl = imageUrl;
+    }
+
+    public static Car from(CreateCarRequest req) {
+        Car car = new Car();
+        car.setBrand(req.getBrand());
+        car.setModel(req.getModel());
+        car.setYear(req.getYear());
+        car.setColor(req.getColor());
+        car.setLicensePlate(req.getLicensePlate());
+        car.setVin(req.getVin());
+        car.setStatus(req.getStatus());
+        car.setDailyPrice(req.getDailyPrice());
+        car.setImageUrl(req.getImageUrl());
+        return car;
     }
 
     @Override

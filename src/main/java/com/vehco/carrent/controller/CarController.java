@@ -1,8 +1,10 @@
 package com.vehco.carrent.controller;
 
+import com.vehco.carrent.dto.CarDto;
+import com.vehco.carrent.dto.CreateCarRequest;
 import com.vehco.carrent.entity.Car;
 import com.vehco.carrent.enums.CarStatus;
-import com.vehco.carrent.repository.CarRepository;
+import com.vehco.carrent.mapping.CarMapping;
 import com.vehco.carrent.service.CarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarController {
     private final CarService carService;
+    private final CarMapping carMapping;
 
     @GetMapping
     List<Car> getAllCars() {
@@ -29,9 +32,10 @@ public class CarController {
     }
 
     @PostMapping()
-    ResponseEntity<Car> addCar(@RequestBody Car car) {
-        Car savedCar = carService.create(car);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCar);
+    ResponseEntity<CarDto> createCar(@RequestBody CreateCarRequest request) {
+        Car createdCar = carService.create(Car.from(request));
+        CarDto carDto = carMapping.toDto(createdCar);
+        return ResponseEntity.status(HttpStatus.CREATED).body(carDto);
     }
 
     @PutMapping("/{id}")
