@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class CarController {
         return carService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     ResponseEntity<CarDto> createCar(@RequestBody CreateCarRequest request) {
         Car createdCar = carService.create(Car.from(request));
@@ -38,18 +40,21 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.CREATED).body(carDto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<Car> updateCar(@RequestBody Car car, @PathVariable Long id) {
         Car updatedCar = carService.update(id, car);
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedCar);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     @PutMapping("/{id}/status")
     ResponseEntity<Car> updateCarStatus(@PathVariable Long id, @Valid @RequestBody CarStatus status) {
         Car updatedCar = carService.updateStatus(id, status);
         return ResponseEntity.ok(updatedCar);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     ResponseEntity<Car> deleteCar(@PathVariable Long id) {
         Car deletedCar = carService.delete(id);
