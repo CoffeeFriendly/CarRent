@@ -1,6 +1,7 @@
 package com.vehco.carrent.service;
 
 import com.vehco.carrent.dto.RentDto;
+import com.vehco.carrent.entity.Car;
 import com.vehco.carrent.entity.Rent;
 import com.vehco.carrent.enums.RentStatus;
 import org.springframework.security.core.Authentication;
@@ -17,4 +18,5 @@ public interface RentService {
     RentDto delete(Long id);
     boolean canAccess(Authentication authentication, Long rentId);
     boolean clientCanCancel(Authentication authentication, Long rentId, RentStatus newStatus);
+    boolean isAvailableAtRentPeriod(Rent rent, Car car);
 }

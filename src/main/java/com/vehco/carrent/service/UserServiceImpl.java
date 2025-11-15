@@ -38,7 +38,9 @@ public class UserServiceImpl implements UserService{
     public User updateUser(Long id, User updatedUser) {
         User user = findById(id);
         EntityUtil.updateEntity(user, updatedUser);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().equals(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return user;
     }
 

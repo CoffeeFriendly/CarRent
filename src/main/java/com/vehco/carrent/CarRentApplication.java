@@ -9,6 +9,7 @@ import com.vehco.carrent.entity.Rent;
 import com.vehco.carrent.entity.User;
 import com.vehco.carrent.service.CarService;
 import com.vehco.carrent.service.RentService;
+import com.vehco.carrent.service.RentServiceImpl;
 import com.vehco.carrent.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
